@@ -31,8 +31,10 @@ json.dumps(parsed)
 api.add_resource(ApiHandler, '/flask/hello',
             resource_class_kwargs={'message': parsed})
 
-api.add_resource(FileHandler, '/filename',
-            resource_class_kwargs={'event': event.group(0), 'session': session.group(0)})
+# api.add_resource(FileHandler, '/filename',
+#             resource_class_kwargs={'event': event.group(0), 'session': session.group(0)})
+
+api.add_resource(FileHandler, '/filename')
 
 api.add_resource(FileUploader, '/upload', 
             resource_class_kwargs={'message': ''})

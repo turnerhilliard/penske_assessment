@@ -113,7 +113,7 @@ function DataViewer() {
                     <th>CarNumber</th>
                     <th>LastName</th>
                     <th>Time</th>
-                    <th>Flag</th>
+                    <th>Lap</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -122,7 +122,7 @@ function DataViewer() {
                             {ConditionallyDecoratedContainerData(data.CarNumber)}
                             <td>{data.LastName}</td>
                             <td>{data.Time}</td>
-                            <td>{data.Flag}</td>
+                            <td>{data.Lap}</td>
                         </tr>
                     ))}
                 </tbody>
