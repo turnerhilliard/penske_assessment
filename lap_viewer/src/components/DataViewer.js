@@ -11,7 +11,6 @@ function DataViewer() {
   const sessionName = fileName.data?.session
 
   useEffect(()=>{
-    // axios.get('http://127.0.0.1:5000/flask/hello').then(response => {
     axios.get('http://127.0.0.1:5000/upload').then(response => {
       console.log("SUCCESS", response)
       setGetMessage(response)

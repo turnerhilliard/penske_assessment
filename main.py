@@ -14,26 +14,6 @@ api = Api(app)
 def serve(path):
     return send_from_directory(app.static_folder,'index.html')
 
-filePath = '/Users/turnerhilliard/Downloads/Chevrolet Detroit Grand Prix_Practice 2.csv'
-
-fileName = re.sub(r'^\/(.+\/)*','',filePath)
-
-event = re.search(r'(.*?)(?=\_)',fileName)
-
-session = re.search(r'(?<=\_)(.*?)(?=\.)', fileName)
-
-data = ApiHandler.read_data(filePath)
-
-result = data.to_json(orient='records')
-parsed = json.loads(result)
-json.dumps(parsed)
-
-api.add_resource(ApiHandler, '/flask/hello',
-            resource_class_kwargs={'message': parsed})
-
-# api.add_resource(FileHandler, '/filename',
-#             resource_class_kwargs={'event': event.group(0), 'session': session.group(0)})
-
 api.add_resource(FileHandler, '/filename')
 
 api.add_resource(FileUploader, '/upload', 
