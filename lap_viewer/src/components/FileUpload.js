@@ -1,54 +1,49 @@
 import React from 'react';
+import axios from 'axios'
 import 'bulma/css/bulma.min.css';
 
 class Upload extends React.Component {
     constructor(props) {
     super(props);
-
-    this.state = {
-        swag: '',
-        something: ''
-    };
     
-    this.handleUploadImage = this.handleUploadImage.bind(this);
+    this.handleUploadFile = this.handleUploadFile.bind(this);
     }
 
-    handleUploadImage(ev) {
+    handleUploadFile(ev) {
+
         ev.preventDefault();
+
         const data = new FormData();
         data.append('file', this.uploadInput.files[0]);
-        this.setState({swag: this.uploadInput.files.item(0).name}) 
         
         const fileName = this.uploadInput.files.item(0).name
-        // const sessionName = fileName.match("(?<=\_).*?(?=\.)")
-        // const trying = sessionName[0]
-        
 
-        // const eventName = fileName.match("(.*?)(?=\_)")
-        // const trying = eventName[0].toString()
-        // console.log(sessionName[0])
-        // console.log(eventName[0])
+        axios.post('http://127.0.0.1:5000/upload', data, {
+            data
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
-        fetch('http://127.0.0.1:5000/upload', {
-            method: 'POST',
-            body: data
-        }).then((response) => {
-            response.json().then((body) => {
-            });
-        });
-        fetch('http://127.0.0.1:5000/filename', {
-            method: 'POST',
-            body: JSON.stringify({ fileName })
-        }).then((response) => {
-            response.json().then((body) => {
-            });
-        });
-        // window.location.reload()
+        axios.post('http://127.0.0.1:5000/filename', {
+            fileName
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        window.location.reload()
     }
     
     render() {
         return (
-    <form onSubmit={this.handleUploadImage}>
+    <form onSubmit={this.handleUploadFile}>
         <br />
         <div class="container">
             <h1 class="title">Add a file</h1>
@@ -61,14 +56,8 @@ class Upload extends React.Component {
                     </span>
                 </span>
             </label>
-            <div>
-                {this.state.swag}
             </div>
-            </div>
-
                 <button class="button is-light">Upload</button>
-
-            
         </div>
         <br />
     </form>

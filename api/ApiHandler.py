@@ -54,6 +54,7 @@ class FileUploader(Resource):
         return data_frame
     
     def superDataFixer(file):
+
         # Fix the errors in incoming data 
         all_data = pd.read_csv(file, on_bad_lines='skip')
         newFrame = all_data.loc[~np.isnan(pd.to_numeric(all_data['CarNumber'], errors='coerce')),:]
@@ -71,4 +72,5 @@ class FileUploader(Resource):
         lap_data = newlapFrame.loc[all_data['ShortName'] == "LAP"]
         sorted_data = lap_data.nsmallest(400,'Time')
         ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
+        
         return ranked
