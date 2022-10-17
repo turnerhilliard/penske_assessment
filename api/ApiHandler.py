@@ -4,6 +4,7 @@ from flask import Flask, request
 import pandas as pd
 import json
 import re
+import numpy as np
 
 class ApiHandler(Resource):
 
@@ -99,21 +100,15 @@ class FileUploader(Resource):
         global parsed 
 
         file = request.files['file']
-        all_data = pd.read_csv(file, on_bad_lines='skip')
-        lap_data = all_data.loc[all_data['ShortName'] == "LAP"]
-        sorted_data = lap_data.nsmallest(400,'Time')
-        ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
-        
-        # try:
-        #     ranked.astype({'CarNumber': 'int'}).dtypes
-        # except ValueError:
-        #     filtered = ranked.drop([2948])
-        #     print("Hopefully i dropped a row")
-        # print(type(ranked.loc[2948, 'CarNumber']))
-        # ranked.loc[ranked['CarNumber'].apply(type) != numpy.float64]
-        # print(filtered)
+        correctedFrame = FileUploader.superDataFixer(file)
 
-        result = ranked.to_json(orient='records')
+        # all_data = pd.read_csv(file, on_bad_lines='skip')
+        # lap_data = all_data.loc[all_data['ShortName'] == "LAP"]
+        # sorted_data = lap_data.nsmallest(400,'Time')
+        # ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
+        # newFrame = ranked.loc[~np.isnan(pd.to_numeric(ranked['CarNumber'], errors='coerce')),:]
+        # correctedFrame = newFrame.astype({'CarNumber': 'int32'}, errors='ignore')
+        result = correctedFrame.to_json(orient='records')
         parsed = json.loads(result)
         return parsed
 
@@ -121,3 +116,28 @@ class FileUploader(Resource):
         global parsed
         data_frame = parsed
         return data_frame
+    
+    def superDataFixer(file):
+        all_data = pd.read_csv(file, on_bad_lines='skip')
+        # lap_data = all_data.loc[all_data['ShortName'] == "LAP"]
+        # sorted_data = lap_data.nsmallest(400,'Time')
+        # ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
+
+        # Correcting all of the data that does not fit the correct type
+        newFrame = all_data.loc[~np.isnan(pd.to_numeric(all_data['CarNumber'], errors='coerce')),:]
+        correctedFrame = newFrame.astype({'CarNumber': int}, errors='ignore')
+        floatFrame = correctedFrame.loc[~np.isnan(pd.to_numeric(correctedFrame['Time'], errors='coerce')),:]
+        newfloatFrame = floatFrame.astype({'Time': float}, errors='ignore')
+        entryFrame = newfloatFrame.loc[~np.isnan(pd.to_numeric(newfloatFrame['EntryTime'], errors='coerce')),:]
+        newentryFrame = entryFrame.astype({'EntryTime': float}, errors='ignore')
+        exitFrame = newentryFrame.loc[~np.isnan(pd.to_numeric(newentryFrame['ExitTime'], errors='coerce')),:]
+        newexitFrame = exitFrame.astype({'ExitTime': float}, errors='ignore')
+        lapFrame = newexitFrame.loc[~np.isnan(pd.to_numeric(newexitFrame['Lap'], errors='coerce')),:]
+        newlapFrame = lapFrame.astype({'Lap': int}, errors='ignore')
+        print(newlapFrame)
+        print(newlapFrame.dtypes)
+        # Sorting the data
+        lap_data = newlapFrame.loc[all_data['ShortName'] == "LAP"]
+        sorted_data = lap_data.nsmallest(400,'Time')
+        ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
+        return ranked
