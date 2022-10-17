@@ -2,9 +2,7 @@ import pandas as pd
 from flask import Flask, send_from_directory
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS #comment this on deployment
-from api.ApiHandler import ApiHandler, FileHandler, FileUploader
-import json
-import re
+from api.ApiHandler import FileHandler, FileUploader, SectorLoader
 
 app = Flask(__name__, static_url_path='', static_folder='lap_viewer/build')
 CORS(app) #comment this on deployment
@@ -16,5 +14,6 @@ def serve(path):
 
 api.add_resource(FileHandler, '/filename')
 
-api.add_resource(FileUploader, '/upload', 
-            resource_class_kwargs={'message': ''})
+api.add_resource(FileUploader, '/upload')
+
+api.add_resource(SectorLoader, '/sector')

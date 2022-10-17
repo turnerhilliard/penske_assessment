@@ -7,6 +7,7 @@ import 'bulma/css/bulma.min.css';
 function DataViewer() {
   const [message, setGetMessage] = useState({})
   const [fileName, setFileName] = useState({})
+  const [sector, setSector] = useState({})
   const eventName = fileName.data?.event
   const sessionName = fileName.data?.session
 
@@ -14,6 +15,12 @@ function DataViewer() {
     axios.get('http://127.0.0.1:5000/upload').then(response => {
       console.log("SUCCESS", response)
       setGetMessage(response)
+    }).catch(error => {
+      console.log(error)
+    })
+    axios.get('http://127.0.0.1:5000/sector').then(response => {
+      console.log("SUCCESS", response)
+      setSector(response)
     }).catch(error => {
       console.log(error)
     })
@@ -109,6 +116,7 @@ function DataViewer() {
             <table class="table notification is-primary">
                 <thead>
                 <tr>
+                    <th>Position</th>
                     <th>CarNumber</th>
                     <th>LastName</th>
                     <th>Time</th>
@@ -118,6 +126,7 @@ function DataViewer() {
                 <tbody>
                 {message.data?.map((data, i) => (
                         <tr key={i}>
+                            <td>{i + 1}</td>
                             {ConditionallyDecoratedContainerData(data.CarNumber)}
                             <td>{data.LastName}</td>
                             <td>{data.Time}</td>
@@ -126,7 +135,41 @@ function DataViewer() {
                     ))}
                 </tbody>
             </table>
-        </div>
+            </div>
+            </div>
+            <div class="container">
+              <div class="notification is-gray">
+                <h1 class="title">Best Sector Times</h1>
+                <h2 class="subtitle">Fastest Theoretical Time is: {sector.data?.fastest}</h2>
+              </div>
+            </div>
+            <div class="container">
+            <div class="notification is-black">
+            <div class="level-item">
+            <table class="table notification is-primary">
+                <thead>
+                <tr>
+                    <th>Sector</th>
+                    <th>CarNumber</th>
+                    <th>LastName</th>
+                    <th>Time</th>
+                    <th>Lap</th>
+                </tr>
+                </thead>
+                <tbody>
+                {sector.data?.times.map((data, i) => (
+                        <tr key={i}>
+                            <td>{i + 1}</td>
+                            {ConditionallyDecoratedContainerData(data.CarNumber)}
+                            <td>{data.LastName}</td>
+                            <td>{data.Time}</td>
+                            <td>{data.Lap}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            </div>
+          </div>
       </div>
 </>
   );

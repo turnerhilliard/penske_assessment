@@ -1,4 +1,3 @@
-from sqlite3 import Row
 from flask_restful import Api, Resource, reqparse
 from flask import Flask, request
 import pandas as pd
@@ -37,13 +36,12 @@ class FileHandler(Resource):
         }
 
 class FileUploader(Resource):
-    def __init__(self, message):
-        self.message = message
     
     def post(self):
         global parsed 
         file = request.files['file']
-        correctedFrame = FileUploader.superDataFixer(file)
+        fixedFrame = FileUploader.superDataFixer(file)
+        correctedFrame = FileUploader.superLapSorter(fixedFrame)
         result = correctedFrame.to_json(orient='records')
         parsed = json.loads(result)
         return parsed
@@ -68,9 +66,46 @@ class FileUploader(Resource):
         lapFrame = newexitFrame.loc[~np.isnan(pd.to_numeric(newexitFrame['Lap'], errors='coerce')),:]
         newlapFrame = lapFrame.astype({'Lap': int}, errors='ignore')
 
-        # Sorting the data
-        lap_data = newlapFrame.loc[all_data['ShortName'] == "LAP"]
-        sorted_data = lap_data.nsmallest(400,'Time')
+        return newlapFrame
+
+    def superLapSorter(newlapFrame):
+        lap_data = newlapFrame.loc[newlapFrame['ShortName'] == "LAP"]
+        sorted_data = lap_data.nsmallest(len(newlapFrame),'Time')
         ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
         
         return ranked
+    
+    def superSectorSorter(newlapFrame):
+        final_frame = pd.DataFrame()
+        for i in range (1,8):
+                sector_string = "S"+ str(i)
+                sector_lap_data = newlapFrame.loc[newlapFrame['ShortName'] == sector_string]
+                sector_sorted_data = sector_lap_data.nsmallest(len(newlapFrame),'Time')
+                sector_ranked = sector_sorted_data.drop_duplicates(subset=['ShortName'], keep='first')
+                final_frame = pd.concat([final_frame, sector_ranked])
+
+        return final_frame
+
+class SectorLoader(Resource):
+    def post(self):
+        global parsed_sector 
+        global fast_times
+        file = request.files['file']
+        fixedFrame = FileUploader.superDataFixer(file)
+        correctedFrame = FileUploader.superSectorSorter(fixedFrame)
+
+        fast_times = np.round(correctedFrame['Time'].sum(), 3)
+
+        result = correctedFrame.to_json(orient='records')
+        parsed_sector = json.loads(result)
+        return parsed_sector
+
+    def get(self):
+        global parsed_sector
+        global fast_times
+        data_frame = parsed_sector
+        sector_time = fast_times
+        return {
+            'times': data_frame, 
+            'fastest': sector_time
+            }

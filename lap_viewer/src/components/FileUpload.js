@@ -27,6 +27,16 @@ class Upload extends React.Component {
           .catch(function (error) {
             console.log(error);
           });
+        
+        axios.post('http://127.0.0.1:5000/sector', data, {
+          data
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
         axios.post('http://127.0.0.1:5000/filename', {
             fileName
