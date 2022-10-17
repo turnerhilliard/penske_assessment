@@ -6,7 +6,8 @@ class Upload extends React.Component {
     super(props);
 
     this.state = {
-        newFile: '',
+        swag: '',
+        something: ''
     };
     
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -16,9 +17,17 @@ class Upload extends React.Component {
         ev.preventDefault();
         const data = new FormData();
         data.append('file', this.uploadInput.files[0]);
-        this.setState({newFile: this.uploadInput.files.item(0).name}) 
+        this.setState({swag: this.uploadInput.files.item(0).name}) 
         
         const fileName = this.uploadInput.files.item(0).name
+        // const sessionName = fileName.match("(?<=\_).*?(?=\.)")
+        // const trying = sessionName[0]
+        
+
+        // const eventName = fileName.match("(.*?)(?=\_)")
+        // const trying = eventName[0].toString()
+        // console.log(sessionName[0])
+        // console.log(eventName[0])
 
         fetch('http://127.0.0.1:5000/upload', {
             method: 'POST',
@@ -34,7 +43,7 @@ class Upload extends React.Component {
             response.json().then((body) => {
             });
         });
-        window.location.reload()
+        // window.location.reload()
     }
     
     render() {
@@ -52,8 +61,14 @@ class Upload extends React.Component {
                     </span>
                 </span>
             </label>
+            <div>
+                {this.state.swag}
             </div>
+            </div>
+
                 <button class="button is-light">Upload</button>
+
+            
         </div>
         <br />
     </form>
