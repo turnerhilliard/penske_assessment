@@ -6,14 +6,25 @@ This project utilizes a Python flask server with a React.js front-end to create 
 
 # Getting Started
 
-First pull the repository, then in terminal, cd to the local directory in which it is stored.
+First ensure that the latest version of python is installed from https://www.python.org/downloads/
 
-Next start the python virtual environment by using the command '. .(venv)/bin/activate' without the quotations.
+Next, pull the repository. Then in terminal, cd to the local directory in which it is stored.
 
-Once the Virtual environment is active, execute the command 'flask --app main run' in the main directory.
+## Imports
+
+Now is a good time to import the libraries necessary to run the code. Each of the following commands should be executed in the project directory:
+- `python3 -m ensure pip --upgrade`
+- `pip3 install flask`
+- `pip3 install flask_restful`
+- `pip3 install flask_cors`
+- `pip3 install pandas`
+
+## Starting the app
+
+In terminal, execute the command `flask --app main run` in the main directory.
 
 Now you should be good to go, just visit http://127.0.0.1:5000/ and the web app will be ready to execute.
 
 # How to use the app
 
-The app is very simple, select 'Choose a file...' to be prompted to pick a CSV file from your file system. Once selected, click the 'Upload' button and the lap times viewer will display the data from fastest to slowest. Please be patient, larger files will take a few seconds (usually around 5) to process the data file.
+The app is very simple, select 'Choose a file...' to be prompted to pick a CSV file from your file system. Once selected, click the 'Upload' button and the lap times viewer will display the data from fastest to slowest. Please be patient, larger files will take a few seconds (usually around 5, depending on your machine) to process the data file.
