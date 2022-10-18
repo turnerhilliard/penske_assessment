@@ -21,7 +21,7 @@ Now is a good time to import the libraries necessary to run the code. Each of th
 
 ## Starting the app
 
-In terminal, execute the command `flask --app main run` in the main directory.
+In terminal, execute the command `flask --app main run` (still in the project directory).
 
 Now you should be good to go, just visit http://127.0.0.1:5000/ and the web app will be ready to execute.
 
