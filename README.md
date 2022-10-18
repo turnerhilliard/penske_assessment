@@ -16,4 +16,4 @@ Now you should be good to go, just visit http://127.0.0.1:5000/ and the web app 
 
 # How to use the app
 
-The app is very simple, select 'Choose a file...' to be prompted to pick a CSV file from your file system. Once selected, click the 'Upload' button and the lap times viewer will display the data from fastest to slowest.
+The app is very simple, select 'Choose a file...' to be prompted to pick a CSV file from your file system. Once selected, click the 'Upload' button and the lap times viewer will display the data from fastest to slowest. Please be patient, larger files will take a few seconds (usually around 5) to process the data file.
