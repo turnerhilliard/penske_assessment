@@ -38,7 +38,7 @@ class FileHandler(Resource):
 class FileUploader(Resource):
     
     def post(self):
-        global parsed 
+        global parsed
         file = request.files['file']
         fixedFrame = FileUploader.superDataFixer(file)
         correctedFrame = FileUploader.superLapSorter(fixedFrame)
@@ -77,7 +77,7 @@ class FileUploader(Resource):
     
     def superSectorSorter(newlapFrame):
         final_frame = pd.DataFrame()
-        for i in range (1,8):
+        for i in range (1, len(newlapFrame)):
                 sector_string = "S"+ str(i)
                 sector_lap_data = newlapFrame.loc[newlapFrame['ShortName'] == sector_string]
                 sector_sorted_data = sector_lap_data.nsmallest(len(newlapFrame),'Time')
@@ -88,7 +88,7 @@ class FileUploader(Resource):
 
 class SectorLoader(Resource):
     def post(self):
-        global parsed_sector 
+        global parsed_sector
         global fast_times
         file = request.files['file']
         fixedFrame = FileUploader.superDataFixer(file)

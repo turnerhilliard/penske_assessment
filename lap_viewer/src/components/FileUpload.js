@@ -31,8 +31,9 @@ class Upload extends React.Component {
         axios.post('http://127.0.0.1:5000/sector', data, {
           data
         })
-        .then(function (response) {
-          console.log(response);
+        .then(async function (response) {
+          await console.log(response);
+          window.location.reload()
         })
         .catch(function (error) {
           console.log(error);
@@ -47,29 +48,27 @@ class Upload extends React.Component {
           .catch(function (error) {
             console.log(error);
           });
-
-        window.location.reload()
     }
     
     render() {
         return (
     <form onSubmit={this.handleUploadFile}>
-        <br />
+      <br />
         <div class="container">
             <h1 class="title">Add a file</h1>
-            <div class="file">
-            <label class="file-label">
-                <input class="file-input" ref={(ref) => { this.uploadInput = ref; }} type="file"/>
-                <span class="file-cta">
-                    <span class="file-label">
-                        Choose a file…
+              <div class="file">
+                <label class="file-label">
+                    <input class="file-input" ref={(ref) => { this.uploadInput = ref; }} type="file"/>
+                    <span class="file-cta">
+                        <span class="file-label">
+                            Choose a file…
+                        </span>
                     </span>
-                </span>
-            </label>
-            </div>
-                <button class="button is-light">Upload</button>
+                </label>
+              </div>
+            <button class="button is-light">Upload</button>
         </div>
-        <br />
+      <br />
     </form>
         );
     }

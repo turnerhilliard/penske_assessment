@@ -18,21 +18,23 @@ def fixData(all_data):
         lapFrame = newexitFrame.loc[~np.isnan(pd.to_numeric(newexitFrame['Lap'], errors='coerce')),:]
         newlapFrame = lapFrame.astype({'Lap': int}, errors='ignore')
 
-        #  Sorting the data
-        final_frame = pd.DataFrame()
-        for i in range (1,8):
-                sector_string = "S"+ str(i)
-                sector_lap_data = newlapFrame.loc[all_data['ShortName'] == sector_string]
-                sector_sorted_data = sector_lap_data.nsmallest(len(all_data),'Time')
-                sector_ranked = sector_sorted_data.drop_duplicates(subset=['ShortName'], keep='first')
-                final_frame = pd.concat([final_frame, sector_ranked])
+        return newlapFrame
 
-
-        return final_frame
+def superLapSorter(newlapFrame):
+        lap_data = newlapFrame.loc[newlapFrame['ShortName'] == "LAP"]
+        sorted_data = lap_data.nsmallest(len(newlapFrame),'Time')
+        ranked = sorted_data.drop_duplicates(subset=['LastName'], keep='first')
+        
+        return ranked
 
 
 newfloatFrame = fixData(data)
-fastTimes = np.round(newfloatFrame['Time'].sum(), 3)
-print(newfloatFrame)
-print(fastTimes)
+newnewfloatFrame = superLapSorter(newfloatFrame)
+
+newnewfloatFrame.astype({'Flag':'string','LastName':'string'})
+
+print(newnewfloatFrame)
+newnewfloatFrame.dtypes()
+
+
 

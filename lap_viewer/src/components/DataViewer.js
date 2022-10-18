@@ -72,7 +72,7 @@ function DataViewer() {
     return children(styleProps);
   }
 
-  const ConditionallyDecoratedContainerData = (input) => {
+  const ifPenskeDriver = (input) => {
   
     if (input === 3) {
       return (
@@ -103,9 +103,16 @@ function DataViewer() {
     return <td>{input}</td>
   }
 
-  return (
-    <>
-      <div class="container">
+  // Conditionally render the data
+
+  var isDataHereYet = ''
+  if (eventName === undefined) {
+    isDataHereYet = <br />
+  }
+  else {
+    isDataHereYet = 
+    <div>
+    <div class="container">
         <div class="notification is-gray">
             <h1 class="title">{eventName}</h1>
             <h2 class="subtitle">{sessionName}</h2>
@@ -127,7 +134,7 @@ function DataViewer() {
                 {message.data?.map((data, i) => (
                         <tr key={i}>
                             <td>{i + 1}</td>
-                            {ConditionallyDecoratedContainerData(data.CarNumber)}
+                            {ifPenskeDriver(data.CarNumber)}
                             <td>{data.LastName}</td>
                             <td>{data.Time}</td>
                             <td>{data.Lap}</td>
@@ -137,41 +144,60 @@ function DataViewer() {
             </table>
             </div>
             </div>
-            <div class="container">
+            </div>
+  }
+
+  var sector_times = ''
+  if (sector.data?.fastest === 0 || sector.data?.fastest === undefined) {
+    sector_times = <br />
+  }
+
+  else {
+    sector_times =
+    <div>
+    <div class="container">
               <div class="notification is-gray">
                 <h1 class="title">Best Sector Times</h1>
                 <h2 class="subtitle">Fastest Theoretical Time is: {sector.data?.fastest}</h2>
               </div>
             </div>
-            <div class="container">
-            <div class="notification is-black">
-            <div class="level-item">
-            <table class="table notification is-primary">
-                <thead>
-                <tr>
-                    <th>Sector</th>
-                    <th>CarNumber</th>
-                    <th>LastName</th>
-                    <th>Time</th>
-                    <th>Lap</th>
+    <div class="container">
+    <div class="notification is-black">
+    <h1>{sector_times}</h1>
+    <div class="level-item">
+    <table class="table notification is-primary">
+        <thead>
+        <tr>
+            <th>Sector</th>
+            <th>CarNumber</th>
+            <th>LastName</th>
+            <th>Time</th>
+            <th>Lap</th>
+        </tr>
+        </thead>
+        <tbody>
+        {sector.data?.times.map((data, i) => (
+                <tr key={i}>
+                    <td>{i + 1}</td>
+                    {ifPenskeDriver(data.CarNumber)}
+                    <td>{data.LastName}</td>
+                    <td>{data.Time}</td>
+                    <td>{data.Lap}</td>
                 </tr>
-                </thead>
-                <tbody>
-                {sector.data?.times.map((data, i) => (
-                        <tr key={i}>
-                            <td>{i + 1}</td>
-                            {ConditionallyDecoratedContainerData(data.CarNumber)}
-                            <td>{data.LastName}</td>
-                            <td>{data.Time}</td>
-                            <td>{data.Lap}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>
-          </div>
-      </div>
-</>
+            ))}
+        </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+</div>
+  }
+
+  return (
+  <>
+    {isDataHereYet}
+    {sector_times}
+  </>
   );
 }
 
